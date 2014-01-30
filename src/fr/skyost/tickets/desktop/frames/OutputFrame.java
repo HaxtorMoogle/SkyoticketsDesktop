@@ -13,6 +13,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
+import fr.skyost.tickets.desktop.Skyotickets;
+
+import java.awt.BorderLayout;
+
 public class OutputFrame extends JFrame {
 
 	private static final long serialVersionUID = -4083882619877335524L;
@@ -31,13 +35,13 @@ public class OutputFrame extends JFrame {
 		txtOutput = new JTextArea();
 		txtOutput.setForeground(Color.WHITE);
 		txtOutput.setBackground(Color.BLACK);
-		txtOutput.setText("Output :");
+		txtOutput.setText(Skyotickets.messages.getProperty("txt-output", "Output :"));
 		txtOutput.setEditable(false);
 		txtOutput.setFont(new Font("Lucida Console", Font.PLAIN, 13));
 		final JScrollPane scrollPane = new JScrollPane(txtOutput, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		pane.add(scrollPane);
 		
-		final JButton btnClearOutput = new JButton("Clear output");
+		final JButton btnClearOutput = new JButton(Skyotickets.messages.getProperty("btn-output", "Clear output"));
 		btnClearOutput.addActionListener(new ActionListener() {
 
 			@Override
@@ -46,7 +50,7 @@ public class OutputFrame extends JFrame {
 			}
 			
 		});
-		scrollPane.setColumnHeaderView(btnClearOutput);
+		pane.add(btnClearOutput, BorderLayout.SOUTH);
 	}
 	
 	public void addText(final String text) {

@@ -15,13 +15,14 @@ import javax.swing.SwingUtilities;
 import fr.skyost.tickets.desktop.Skyotickets;
 import fr.skyost.tickets.desktop.frames.CommandFrame;
 import fr.skyost.tickets.desktop.frames.OutputFrame;
+import fr.skyost.tickets.desktop.utils.Utils;
 
 public class RemoteControl extends Thread {
 	
-	private JFrame jFrame;
-	private String host;
-	private String port;
-	private String command;
+	private final JFrame jFrame;
+	private final String host;
+	private final  String port;
+	private final String command;
 	
 	private Socket socket;
 	
@@ -39,7 +40,7 @@ public class RemoteControl extends Thread {
 		jFrame.setTitle("Please wait...");
 		try {
 			socket = new Socket(host, Integer.parseInt(port));
-			socket.setSoTimeout(Integer.valueOf(Skyotickets.properties.getProperty("timeOut")));
+			socket.setSoTimeout(Integer.valueOf(Skyotickets.properties.getProperty("time-out")));
 			final PrintWriter sender = new PrintWriter(new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), true);
 			sender.println(command);
 			final BufferedReader receiver = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -65,15 +66,15 @@ public class RemoteControl extends Thread {
 								commandFrame.setTitle(host + ":" + port);
 								commandFrame.setLocationRelativeTo(null);
 								commandFrame.setVisible(true);
-								Skyotickets.hide(jFrame);
-								Skyotickets.close(jFrame);
+								Utils.hide(jFrame);
+								Utils.close(jFrame);
 							}
 							else {
 								JOptionPane.showMessageDialog(jFrame, response, "Bad response !", JOptionPane.ERROR_MESSAGE);
 							}
 						}
 						catch(Exception ex) {
-							JOptionPane.showMessageDialog(jFrame, ex, "Error !", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(jFrame, ex, Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 						}
 					}
 					
@@ -81,7 +82,7 @@ public class RemoteControl extends Thread {
 			}
 		}
 		catch(Exception ex) {
-			JOptionPane.showMessageDialog(jFrame, ex, "Error !", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(jFrame, ex, Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 		}
 		jFrame.setTitle(title);
 	}

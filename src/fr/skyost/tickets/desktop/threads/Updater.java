@@ -1,8 +1,6 @@
 package fr.skyost.tickets.desktop.threads;
 
 import java.awt.Desktop;
-import java.util.regex.Pattern;
-
 import javax.swing.JEditorPane;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
@@ -15,6 +13,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import fr.skyost.tickets.desktop.Skyotickets;
+import fr.skyost.tickets.desktop.utils.Utils;
 
 public class Updater extends Thread {
 	
@@ -25,7 +24,7 @@ public class Updater extends Thread {
 		try {
 			final Connection connection = (HttpConnection)Jsoup.connect(PAGE_URL);
 			connection.data("query", "Java");
-			connection.userAgent("Skyotickets Desktop");
+			connection.userAgent("SkyoticketsDesktop v" + Skyotickets.VERSION);
 			connection.timeout(10000);
 			final Document page = connection.get();
 			String remoteVersion = null;
@@ -41,7 +40,7 @@ public class Updater extends Thread {
 			if(remoteVersion == null) {
 				return;
 			}
-			if(compareVersions(remoteVersion, Skyotickets.VERSION)) {
+			if(Utils.compareVersions(remoteVersion, Skyotickets.VERSION)) {
 				JEditorPane jEditorPane = new JEditorPane("text/html", "<html>An update has been found : v" + remoteVersion + " !<br>You can the download the new version <a href=\""+ PAGE_URL +"\">here</a>.</html>");
 				jEditorPane.addHyperlinkListener(new HyperlinkListener() {
 
@@ -67,25 +66,6 @@ public class Updater extends Thread {
 		catch(Exception ex) {
 			JOptionPane.showMessageDialog(null, ex, "Error while checking for updates !", JOptionPane.ERROR_MESSAGE);
 		}
-	}
-	
-	public static final boolean compareVersions(final String versionTo, final String versionWith) {
-		final int cmp = normalisedVersion(versionTo, ".", 4).compareTo(normalisedVersion(versionWith, ".", 4));
-		if(cmp < 0) {
-			return false;
-		}
-		else if(cmp > 0) {
-			return true;
-		}
-		return false;
-	}
-	
-	private static final String normalisedVersion(final String version, final String separator, final int maxWidth) {
-		final StringBuilder stringBuilder = new StringBuilder();
-		for(final String normalised : Pattern.compile(separator, Pattern.LITERAL).split(version)) {
-			stringBuilder.append(String.format("%" + maxWidth + 's', normalised));
-		}
-		return stringBuilder.toString();
 	}
 	
 }

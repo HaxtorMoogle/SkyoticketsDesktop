@@ -29,25 +29,25 @@ public class CommandFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setIconImage(ImageIO.read(Skyotickets.class.getResource("/fr/skyost/tickets/desktop/res/Paper.png")));
 		setResizable(false);
-		setSize(420, 210);
+		setSize(480, 210);
 		pane.setLayout(null);
 		
 		final JLabel lblSkyotickets = new JLabel(new ImageIcon(Skyotickets.class.getResource("/fr/skyost/tickets/desktop/res/Skyotickets.png")));
-		lblSkyotickets.setBounds(0, 11, 414, 90);
+		lblSkyotickets.setBounds(0, 6, 468, 90);
 		pane.add(lblSkyotickets);
 		
-		final JLabel lblCommand = new JLabel("Command :");
-		lblCommand.setBounds(10, 112, 65, 14);
+		final JLabel lblCommand = new JLabel(Skyotickets.messages.getProperty("lbl-command", "Command :"));
+		lblCommand.setBounds(10, 112, 131, 14);
 		pane.add(lblCommand);
 		
 		txtCommand.setFont(new Font("SansSerif", Font.PLAIN, 12));
-		txtCommand.setBounds(83, 105, 321, 28);
+		txtCommand.setBounds(153, 105, 315, 28);
 		txtCommand.setColumns(10);
 		pane.add(txtCommand);
 		
-		final JButton btnSend = new JButton("Send !");
+		final JButton btnSend = new JButton(Skyotickets.messages.getProperty("btn-send", "Send !"));
 		btnSend.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnSend.setBounds(10, 137, 392, 34);
+		btnSend.setBounds(10, 137, 458, 34);
 		btnSend.addActionListener(new ActionListener() {
 
 			@Override
@@ -56,7 +56,7 @@ public class CommandFrame extends JFrame {
 					new RemoteControl(getJFrame(), Skyotickets.host, Skyotickets.port, txtCommand.getText()).start();
 				}
 				catch(IOException ex) {
-					JOptionPane.showMessageDialog(getJFrame(), ex, "Error !", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getJFrame(), ex, Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			

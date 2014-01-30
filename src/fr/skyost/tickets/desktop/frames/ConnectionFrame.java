@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import fr.skyost.tickets.desktop.Skyotickets;
 import fr.skyost.tickets.desktop.threads.RemoteControl;
+import fr.skyost.tickets.desktop.utils.Utils;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -38,9 +39,11 @@ public class ConnectionFrame extends JFrame {
 		setTitle("Skyotickets Desktop v" + Skyotickets.VERSION);
 		setIconImage(ImageIO.read(Skyotickets.class.getResource("/fr/skyost/tickets/desktop/res/Paper.png")));
 		setResizable(false);
-		setSize(420, 278);
+		setSize(480, 278);
 		pane.setLayout(null);
-		lblSettings.setBounds(Integer.parseInt(Skyotickets.properties.getProperty("settingsIconX")), Integer.parseInt(Skyotickets.properties.getProperty("settingsIconY")), 32, 32);
+
+
+		lblSettings.setBounds(Integer.parseInt(Skyotickets.properties.getProperty("settings-icon-x")), Integer.parseInt(Skyotickets.properties.getProperty("settings-icon-y")), 32, 32);
 		lblSettings.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		lblSettings.addMouseListener(new MouseListener() {
 	
@@ -50,19 +53,19 @@ public class ConnectionFrame extends JFrame {
 					new SettingsFrame().setVisible(true);
 				}
 				catch(Exception ex) {
-					JOptionPane.showMessageDialog(getJFrame(), ex, "Error !", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getJFrame(), ex, Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
 			@Override
 			public final void mouseReleased(final MouseEvent event) {
 				try {
-					Skyotickets.properties.put("settingsIconX", String.valueOf(lblSettings.getX()));
-					Skyotickets.properties.put("settingsIconY", String.valueOf(lblSettings.getY()));
-					Skyotickets.properties.store(new FileOutputStream(new File(Skyotickets.getApplicationDirectory(), "skyotickets.properties")), "Skyotickets Desktop");
+					Skyotickets.properties.put("settings-icon-x", String.valueOf(lblSettings.getX()));
+					Skyotickets.properties.put("settings-icon-y", String.valueOf(lblSettings.getY()));
+					Skyotickets.properties.store(new FileOutputStream(new File(Utils.getApplicationDirectory(), "skyotickets.properties")), "Skyotickets Desktop");
 				}
 				catch(Exception ex) {
-					JOptionPane.showMessageDialog(getJFrame(), ex, "Error !", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getJFrame(), ex, Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
@@ -90,42 +93,42 @@ public class ConnectionFrame extends JFrame {
 		pane.add(lblSettings);
 		
 		final JLabel lblSkyotickets = new JLabel(new ImageIcon(Skyotickets.class.getResource("/fr/skyost/tickets/desktop/res/Skyotickets.png")));
-		lblSkyotickets.setBounds(0, 11, 414, 90);
+		lblSkyotickets.setBounds(0, 6, 468, 90);
 		pane.add(lblSkyotickets);
 		
-		final JLabel lblHost = new JLabel("Host :");
-		lblHost.setBounds(10, 117, 32, 14);
+		final JLabel lblHost = new JLabel(Skyotickets.messages.getProperty("lbl-host", "Host :"));
+		lblHost.setBounds(10, 117, 115, 14);
 		pane.add(lblHost);
 		
 		final JTextField txtHost = new JTextField();
-		txtHost.setBounds(73, 109, 331, 28);
+		txtHost.setBounds(137, 110, 331, 28);
 		txtHost.setText(Skyotickets.properties.getProperty("host"));
 		txtHost.setColumns(10);
 		pane.add(txtHost);
 		
-		final JLabel lblPort = new JLabel("Port :");
-		lblPort.setBounds(10, 142, 32, 14);
+		final JLabel lblPort = new JLabel(Skyotickets.messages.getProperty("lbl-port", "Port :"));
+		lblPort.setBounds(10, 142, 115, 14);
 		pane.add(lblPort);
 		
 		final JTextField txtPort = new JTextField();
-		txtPort.setBounds(73, 134, 331, 28);
+		txtPort.setBounds(137, 135, 331, 28);
 		txtPort.setText(Skyotickets.properties.getProperty("port"));
 		txtPort.setColumns(10);
 		pane.add(txtPort);
 		
-		final JLabel lblPass = new JLabel("Password :");
-		lblPass.setBounds(10, 166, 62, 14);
+		final JLabel lblPass = new JLabel(Skyotickets.messages.getProperty("lbl-password", "Password :"));
+		lblPass.setBounds(10, 166, 115, 14);
 		pane.add(lblPass);
 		
 		final JPasswordField txtPass = new JPasswordField();
-		txtPass.setBounds(73, 159, 331, 28);
+		txtPass.setBounds(137, 159, 331, 28);
 		txtPass.setColumns(10);
 		txtPass.setText(Skyotickets.properties.getProperty("password"));
 		pane.add(txtPass);
 		
-		final JButton btnLogin = new JButton("Login");
+		final JButton btnLogin = new JButton(Skyotickets.messages.getProperty("btn-login", "Login"));
 		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 11));
-		btnLogin.setBounds(10, 203, 394, 34);
+		btnLogin.setBounds(10, 203, 458, 34);
 		btnLogin.addActionListener(new ActionListener() {
 
 			@Override
@@ -135,7 +138,7 @@ public class ConnectionFrame extends JFrame {
 					final String port = txtPort.getText();
 					final String password = new String(txtPass.getPassword());
 					if(host.length() == 0 || port.length() == 0 || password.length() == 0) {
-						JOptionPane.showMessageDialog(getJFrame(), "You must fill all fields !", "Error !", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(getJFrame(), Skyotickets.messages.getProperty("msg-fields", "You must fill all fields !"), Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 						return;
 					}
 					if(Skyotickets.host == null) {
@@ -144,12 +147,12 @@ public class ConnectionFrame extends JFrame {
 						Skyotickets.properties.put("host", host);
 						Skyotickets.properties.put("port", port);
 						Skyotickets.properties.put("password", password);
-						Skyotickets.properties.store(new FileOutputStream(new File(Skyotickets.getApplicationDirectory(), "skyotickets.properties")), "Skyotickets Desktop");
+						Skyotickets.properties.store(new FileOutputStream(new File(Utils.getApplicationDirectory(), "skyotickets.properties")), "Skyotickets Desktop");
 					}
 					new RemoteControl(getJFrame(), host, port, "auth " + password).start();
 				}
 				catch(Exception ex) {
-					JOptionPane.showMessageDialog(getJFrame(), ex, "Error !", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(getJFrame(), ex, Skyotickets.messages.getProperty("exception-error", "Error !"), JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
